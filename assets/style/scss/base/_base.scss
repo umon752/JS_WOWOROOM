@@ -1,0 +1,59 @@
+* {
+    letter-spacing: 1px;
+    scroll-behavior: smooth;
+
+    &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    @include linear;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+ul {
+    list-style: none;
+}
+
+ul,
+ol {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+input,
+select,
+textarea {
+    -webkit-appearance: none; // Safari 和 Chrome，常用於 iOS 下移除內建樣式 
+    -moz-appearance: none; // FireFox
+    appearance: none;
+}
+
+// 移除 BS4 h1-h6 的預設 margin-bottom
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+p {
+    margin-bottom: 0;
+    line-height: 1.5;
+}

@@ -1,0 +1,16 @@
+.point {
+    &::after {
+        content: '';
+        position: absolute;
+        top: 6px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50px;
+        background-color: $primary;
+        opacity: .7;
+
+        @include media-breakpoint-up(lg) {
+            right: 9px;
+        }
+    }
+}

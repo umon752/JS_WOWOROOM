@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOWOROOM | 後台管理</title>
+    <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+    <!-- material icon（CDN） -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- AOS（CDN） -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="./assets/style/css/all.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-secondary sticky-top">
+        <div class="container">
+            <h1 class="h4 d-flex align-items-center font-weight-bold">
+                <a class="navbar-brand" href="./index.html">WOWOROOM</a>
+            </h1>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-grow-0 text-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">後台管理</a>
+                    <a class="point nav-link position-relative text-primary ml-lg-5" href="#">管理員登入</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+    <!-- 全品項營收比重 -->
+    <section class="container py-7" data-aos="fade-up">
+        <h3 class="h4 text-dark text-center mb-4">全品項營收比重</h3>
+        <!-- 圓餅圖 -->
+        <div class="js-pie mb-5"></div>
+        <!-- table -->
+        <div class="text-right">
+            <a href="#" class="js-deleteOrderAll btn btn-outline-dark mb-2">清除全部訂單</a>
+        </div>
+
+        <div class="scroll d-md-flex justify-content-center">
+            <table class="table font-size-sm text-nowrap">
+                <thead>
+                    <tr>
+                        <th scope="col">訂單編號</th>
+                        <th scope="col">聯絡人</th>
+                        <th scope="col">聯絡地址</th>
+                        <th scope="col">電子郵件</th>
+                        <th scope="col">訂單品項</th>
+                        <th scope="col">訂單日期</th>
+                        <th scope="col">訂單狀態</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="js-tbody">
+                    <!-- <tr>
+                        <td>10088377474</td>
+                        <td>小杰 0912345678</td>
+                        <td>高雄市前鎮區六合路183巷66號</td>
+                        <td>cccexample@gmail.com</td>
+                        <td>Louvre 雙人床架</td>
+                        <td>2021/03/08</td>
+                        <td><button class="btn text-primary-dark">未處理</button></td>
+                        <td>
+                            <a href="#" class="material-icons h5 text-secondary-light">
+                                delete
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10088377474</td>
+                        <td>小杰 0912345678</td>
+                        <td>高雄市前鎮區六合路183巷66號</td>
+                        <td>cccexample@gmail.com</td>
+                        <td>Louvre 雙人床架</td>
+                        <td>2021/03/08</td>
+                        <td><button class="btn text-secondary" disabled>已處理</button></td>
+                        <td>
+                            <a href="#" class="material-icons h5 text-secondary-light">
+                                delete
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10088377474</td>
+                        <td>小杰 0912345678</td>
+                        <td>高雄市前鎮區六合路183巷66號</td>
+                        <td>cccexample@gmail.com</td>
+                        <td>Louvre 雙人床架</td>
+                        <td>2021/03/08</td>
+                        <td><button class="btn text-primary-dark">未處理</button></td>
+                        <td>
+                            <a href="#" class="material-icons h5 text-secondary-light">
+                                delete
+                            </a>
+                        </td>
+                    </tr> -->
+
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+
+
+
+    <footer class="border-top border-secondary-light py-3">
+        <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+            <h1 class="h6 d-flex align-items-center mb-1 mb-md-0">
+                <a class="text-secondary" href="./index.html">WOWOROOM</a>
+            </h1>
+            <p class="font-size-sm mb-1 mb-md-0">© 2021 WOWOROOM.All Rights Reserved.</p>
+            <ul class="d-flex">
+                <li class="mr-2">
+                    <a href="#" class="material-icons text-secondary">
+                        facebook
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="material-icons text-secondary">
+                        smart_display
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- 訂單品項 Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content px-3">
+                <div class="modal-header border-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body py-0">
+                    <div
+                        class="bg-primary-light border-bottom border-top border-primary row align-items-center font-size-sm py-2 mb-3">
+                        <span class="col-9 col-md-7">品名</span>
+                        <span class="col-3 col-md-2 text-center">數量</span>
+                        <span class="col-md-3 text-right d-none d-md-block">金額</span>
+                    </div>
+                    <ul class="js-modalBody font-size-sm">
+                        <!-- <li class="row align-items-center mb-2">        
+                            <span class="col-9 col-md-7">名稱</span>
+                            <span class="col-3 col-md-2 text-center">x 1</span>
+                            <span class="col-md-3 text-right d-none d-md-block">NT$18000</span>
+                            </li> -->
+                        <!-- <div class="border-top border-secondary-light text-right pt-2 mt-3">總金額<span class="ml-3">NT$18000</span></div> -->
+                    </ul>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-sm btn-primary-dark text-white px-4"
+                        data-dismiss="modal">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anime（CDN） -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- AOS（CDN） -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <!-- axios（CDN） -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- d3（Source） -->
+    <script src="./assets/js/d3-5.8.2.min.js"></script>
+    <!-- c3（Source） -->
+    <script src="./assets/js/c3.min.js"></script>
+    <!-- jquery（Source） -->
+    <script src="./assets/js/jquery-3.5.1.slim.min.js"></script>
+    <!-- bootstrap（Source） -->
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/admin.js"></script>
+</body>
+
+</html>

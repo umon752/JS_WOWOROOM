@@ -1,0 +1,154 @@
+.banner {
+    @include bg-cover("/assets/images/banner.jpg", 380px);
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        height: 500px;
+        border-radius: $border-radius-lg;
+
+    }
+}
+
+.introBg {
+    @include img-cover(100px);
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        height: 150px;
+    }
+
+    &:hover>.introMask {
+        background-color: rgba(0, 0, 0, 0.15);
+        @include linear;
+    }
+
+    &:hover>.introText {
+        opacity: 1;
+        @include linear;
+    }
+
+    &:hover>.introText::after {
+        width: 100%;
+        @include linear;
+    }
+}
+
+.introMask {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    @include linear;
+}
+
+.introText {
+    opacity: .7;
+    @include linear;
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 0;
+        height: 1px;
+        background-color: white;
+        transform: translateX(-50%);
+        @include linear;
+    }
+}
+
+.tableWidth {
+    width: auto;
+
+    @include media-breakpoint-up(md) {
+        width: 700px;
+    }
+}
+
+.recommendPdImg {
+    @include img-cover(96px);
+}
+
+.recommendAvatarImg {
+    @include img-cover(40px);
+}
+
+.transportIcon {
+    width: 80px;
+    height: 80px;
+    border: 2px solid $dark;
+    font-size: 32px;
+
+    @include media-breakpoint-up(md) {
+        width: 90px;
+        height: 90px;
+        font-size: 40px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        width: 115px;
+        height: 115px;
+        font-size: 48px;
+    }
+}
+
+.productImg {
+    @include img-cover(150px);
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        height: 220px;
+    }
+
+    @include media-breakpoint-up(xl) {
+        height: 302px;
+    }
+}
+
+.productTag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.cartImg {
+    @include img-cover(100px);
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        height: 80px;
+    }
+}
+
+.message {
+    position: fixed;
+    bottom: 45%;
+    left: 50%;
+
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: all linear .3s;
+
+    &--active {
+        bottom: 50%;
+        opacity: 1;
+        transition: all linear .3s;
+    }
+}
+
+.goTop {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    @include media-breakpoint-up(md) {
+        width: 50px;
+        height: 50px;
+        bottom: 50px;
+        right: 50px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+}

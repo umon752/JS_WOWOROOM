@@ -1,0 +1,18 @@
+.scroll {
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+        background-color: white;
+        border-radius: $border-radius-lg;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $primary;
+        border-radius: $border-radius-lg;
+    }
+
+    @include media-breakpoint-up(lg) {
+        overflow-x: hidden;
+    }
+}

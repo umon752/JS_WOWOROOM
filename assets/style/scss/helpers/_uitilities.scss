@@ -1,0 +1,31 @@
+// $h1-h6
+@mixin h1-h6($grid-breakpoints: null) {
+
+    @each $key,
+    $value in $h1-h6 {
+
+        .#{$key}#{$grid-breakpoints} {
+            font-size: $value !important;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    @include h1-h6(-md);
+}
+
+@include media-breakpoint-up(lg) {
+    @include h1-h6(-lg);
+}
+
+.font-size-sm {
+    font-size: $font-size-sm; // 14px
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.letter-spacing {
+    letter-spacing: .2rem;
+}

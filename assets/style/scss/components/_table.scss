@@ -1,0 +1,22 @@
+.table thead th {
+    border-width: 1px;
+}
+
+th {
+    font-weight: $font-weight-normal;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table thead th,
+tbody td {
+    text-align: center;
+}
+
+.table th,
+td {
+    border-top: none;
+    border-bottom: 1px solid $text-muted;
+}

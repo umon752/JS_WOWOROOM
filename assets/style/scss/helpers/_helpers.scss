@@ -1,0 +1,19 @@
+@mixin linear {
+    transition: all linear 200ms;
+}
+
+@mixin img-cover($height) {
+    width: $height;
+    height: $height;
+    object-fit: cover;
+    object-position: center;
+}
+
+@mixin bg-cover($url, $height) {
+    background-image: url($url);
+    width: $height;
+    height: $height;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
