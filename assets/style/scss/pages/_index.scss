@@ -1,5 +1,5 @@
 .banner {
-    @include bg-cover("/assets/images/banner.jpg", 380px);
+    @include bg-cover("../images/banner.jpg", 380px);
     width: 100%;
 
     @include media-breakpoint-up(md) {
@@ -93,15 +93,24 @@
 }
 
 .productImg {
-    @include img-cover(150px);
-    width: 100%;
+    &--bigger {
+        @include linear;
+        @include img-cover(150px);
+        width: 100%;
 
-    @include media-breakpoint-up(md) {
-        height: 220px;
+        @include media-breakpoint-up(md) {
+            height: 220px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            height: 302px;
+        }
     }
 
-    @include media-breakpoint-up(xl) {
-        height: 302px;
+
+    &:hover>&--bigger {
+        transform: scale(1.15);
+        @include linear;
     }
 }
 

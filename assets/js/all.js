@@ -101,11 +101,13 @@ function getProductList() {
 function renderStr(item) {
     return `<li class="col-6 col-md-4 col-lg-3 mb-4">
     <div class="productTag bg-dark text-white py-2 px-4">新品</div>
-    <img src=${item.images} class="productImg">
+    <a href="#" class="productImg d-block overflow-hidden">
+    <img src=${item.images} class="productImg--bigger">
+    </a>
     <a href="#" class="btn btn-dark rounded-0 w-100 mb-2" data-id="${item.id}">加入購物車</a>
-    <h4 class="font-size-sm h6-md mb-md-2">${item.title}</h4>
-    <del class="font-size-sm h6-md">${item.origin_price}</del>
-    <h5 class="h6 h5-md">${item.price}</h5>
+    <h4 class="font-size-sm h6-md mb-md-2"><a href="#" class="text-dark">${item.title}</a></h4>
+    <del class="font-size-sm h6-md">NT$${item.origin_price}</del>
+    <h5 class="h6 h5-md">NT$${item.price}</h5>
     </li>`
 }
 
@@ -198,13 +200,13 @@ function renderCartList(data, finalTotal) {
         <h4 class="h6"><span class="d-md-none">品名：</span>${item.product.title}</h4>
     </li>
     <li class="col-md-2 col-lg-3">
-        <h5 class="h6"><span class="d-md-none">單價：</span>${item.product.price}</h5>
+        <h5 class="h6"><span class="d-md-none">單價：</span>NT$${item.product.price}</h5>
     </li>
     <li class="col-md-2 col-lg-3">
         <div><span class="d-md-none">數量：</span>${item.quantity}</div>
     </li>
     <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
-        <h5 class="h6"><span class="d-md-none">金額：</span>${item.product.price * item.quantity}</h5>
+        <h5 class="h6"><span class="d-md-none">金額：</span>NT$${item.product.price * item.quantity}</h5>
         <a href="#" class="material-icons text-dark" data-id="${item.id}">
             close
         </a>

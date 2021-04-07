@@ -209,8 +209,8 @@ function checkList(e) {
         // console.log(dataOrderList[index]);
         strModalBody += `<li class="row align-items-center mb-2">        
         <span class="col-9 col-md-7">${item.title}</span>
-        <span class="col-3 col-md-2 text-center">x ${item.quantity}</span>
-        <span class="col-md-3 text-right d-none d-md-block">NT$${item.price*item.quantity}</span>
+        <span class="col-3 col-md-2">${item.quantity}</span>
+        <span class="col-md-3 d-none d-md-block">NT$${item.price*item.quantity}</span>
         </li>`;
         strModalFooter = `<div class="border-top border-secondary-light text-right pt-2 mt-3">總金額<span class="ml-3">NT$${dataOrderList[index].total}</span></div>`
     })
