@@ -20,6 +20,8 @@ const message = document.querySelector('.js-message');
  */
 // 產品列表資料
 let dataProductList = [];
+// 購物車列表資料
+let dataCartList = [];
 
 
 
@@ -73,7 +75,7 @@ function loading() {
 
     // loading 消失
     setTimeout(function () {
-        loading.classList.add('fadeOut');
+        loading.classList.add('loading--fadeOut');
         // Anime 停止
         animation.pause();
         // 載入 AOS
@@ -118,11 +120,6 @@ function renderProductList() {
         str += renderStr(item);
     })
     productList.innerHTML = str;
-
-    // const addCartBtn = document.querySelectorAll('.js-addCart');
-    // addCartBtn.forEach(function (item) {
-    //     item.addEventListener('click', addCartItem, false);
-    // })
 }
 
 // 篩選產品列表
@@ -144,20 +141,36 @@ function filterProductList(e) {
 function addCartItem(e) {
     e.preventDefault();
     if (e.target.getAttribute('class') == 'btn btn-dark rounded-0 w-100 mb-2') {
+        // 產品 ID
         let productId = e.target.getAttribute('data-id');
-        // console.log(productId);
+        // 數量
+        let num = 1;
+
+        // 該產品已存在購物車中，數量 +1
+        dataCartList.forEach(function (item) {
+            if (item.product.id === productId) {
+                num = item.quantity += 1;
+            }
+        })
+
         let obj = {
             "productId": productId,
-            "quantity": 1
+            "quantity": num
         };
+        // console.log(obj);
         axios.post(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
             data: obj
         }).
         then(function (response) {
-            let dataCartList = [];
             dataCartList = response.data.carts;
             // 最後總金額
             let finalTotal = response.data.finalTotal;
+            // 顯示訊息
+            message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
+            加入購物車成功`;
+            // 訊息動態顯示
+            messageActive();
+            // console.log(dataCartList);
             renderCartList(dataCartList, finalTotal);
         }).catch(function (error) {
             console.log(error);
@@ -169,7 +182,6 @@ function addCartItem(e) {
 function getCartList() {
     axios.get(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`).
     then(function (response) {
-        let dataCartList = [];
         dataCartList = response.data.carts;
         // 最後總金額
         let finalTotal = response.data.finalTotal;
@@ -224,11 +236,13 @@ function deleteAllCartList(e) {
 
     axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`).
     then(function (response) {
-        let dataCartList = [];
         dataCartList = response.data.carts;
         // 最後總金額
         let finalTotal = response.data.finalTotal;
-
+        // 顯示訊息
+        message.innerHTML = `已刪除所有品項`;
+        // 訊息動態顯示
+        messageActive();
         renderCartList(dataCartList, finalTotal);
     }).catch(function (error) {
         console.log(error);
@@ -246,10 +260,13 @@ function deleteCartItem(e) {
 
         axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
         then(function (response) {
-            let dataCartList = [];
             dataCartList = response.data.carts;
             // 最後總金額
             let finalTotal = response.data.finalTotal;
+            // 顯示訊息
+            message.innerHTML = `已刪除單筆品項`;
+            // 訊息動態顯示
+            messageActive();
             renderCartList(dataCartList, finalTotal);
         }).catch(function (error) {
             console.log(error);
@@ -323,15 +340,23 @@ function createOrder(e) {
             form.reset();
             // 清除購物車產品
             cartList.innerHTML = `<div class="text-primary text-center py-4">目前尚未有商品</div>`;
-            // 顯示已送出預訂資料訊息
-            message.classList.add('message--active');
-            setTimeout(function () {
-                message.classList.remove('message--active');
-            }, 1500);
+            // 顯示訊息
+            message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
+            已送出預訂資料`;
+            // 訊息動態顯示
+            messageActive();
         }).catch(function (error) {
             console.log(error);
         })
     }
+}
+
+// 訊息顯示
+function messageActive() {
+    message.classList.add('message--active');
+    setTimeout(function () {
+        message.classList.remove('message--active');
+    }, 1500);
 }
 
 

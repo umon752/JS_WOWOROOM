@@ -1,0 +1,15 @@
+.message {
+    position: fixed;
+    bottom: 45%;
+    left: 50%;
+
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: all linear .3s;
+
+    &--active {
+        bottom: 50%;
+        opacity: 1;
+        transition: all linear .3s;
+    }
+}

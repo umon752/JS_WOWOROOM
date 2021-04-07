@@ -1,12 +1,12 @@
-.js-loading {
-    &.fadeOut {
+.loading {
+    &.loading--fadeOut {
         display: none !important;
         opacity: 0;
         @include linear;
     }
 }
 
-.js-loading-line {
+.loading-line {
     opacity: 0;
     position: absolute;
     left: 0;

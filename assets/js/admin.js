@@ -17,6 +17,7 @@ const tbody = document.querySelector('.js-tbody');
 const deleteOrder = document.querySelector('.js-deleteOrderAll');
 const modal = document.querySelector('#modal');
 const modalBody = document.querySelector('.js-modalBody');
+const message = document.querySelector('.js-message');
 
 
 
@@ -30,7 +31,7 @@ const primary = "#fd9a6c";
 const primaryLight = "#ffd0b3";
 const primaryDark = "#ff7b3e";
 const light = "#e9ecef";
-// 顏色 (深到淺 -> 排名高到低)
+// 顏色 (深到淺 -> 排名高到低 (共四個排名))
 let colors = [primaryDark, primary, primaryLight, light];
 
 
@@ -54,13 +55,13 @@ function productTitle(data) {
     data.forEach(function (item) {
         item.products.forEach(function (value) {
             if (obj[value.title] === undefined) {
-                obj[value.title] = 1;
+                obj[value.title] = value.price;
             } else {
-                obj[value.title] += 1;
+                obj[value.title] = value.price + value.price;
             }
         })
     })
-    // console.log(obj);
+    console.log(obj);
 
     objAry = Object.keys(obj);
     objAry.forEach(function (item) {
@@ -68,27 +69,30 @@ function productTitle(data) {
         ary.push(item);
         ary.push(obj[item]);
         productTitle.push(ary);
+        // console.log(ary);
     })
 
     // console.log(objAry);
-    // console.log(productTitle);
+    console.log(productTitle);
 
     // 排序 (多到少)
     productTitle.sort(function (a, b) {
-        return b - a;
+        return b[1] - a[1];
     });
-    // console.log(productTitle);
-    productTitle.forEach(function (item, index) {
-        let ary = ["其他", 0];
+    console.log(productTitle);
 
+    // 第三名之後的格式
+    let ary = ["其他", 0];
+
+    productTitle.forEach(function (item, index) {
         if (index > 2) {
             ary[1] += item[1];
-            productTitle.splice(3, 0, ary);
         }
-        // console.log(ary);
     })
+    // 將 ary 放到 productTitle 陣列第 4 筆
+    productTitle.splice(3, 0, ary);
+    // 刪除 productTitle 陣列第 4 筆之後的資料
     productTitle.splice(4, productTitle.length - 1);
-    // console.log(productTitle);
     renderC3(productTitle);
 }
 
@@ -131,7 +135,7 @@ function renderC3(array) {
             arrayName[item[0]] = colors[index];
         }
     })
-    // console.log(arrayName);
+    console.log(arrayName);
 
     const pieChart = c3.generate({
         bindto: ".js-pie", // HTML 元素綁定
@@ -246,8 +250,12 @@ function editOrderList(e) {
                 }
             })
             .then(function (response) {
-                let dataOrderList = [];
                 dataOrderList = response.data.orders;
+                // 顯示訊息
+                message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
+            訂單狀態修改成功`;
+                // 訊息動態顯示
+                messageActive();
                 renderOrderList(dataOrderList);
             }).catch(function (error) {
                 console.log(error);
@@ -264,8 +272,11 @@ function editOrderList(e) {
                 }
             })
             .then(function (response) {
-                let dataOrderList = [];
                 dataOrderList = response.data.orders;
+                // 顯示訊息
+                message.innerHTML = `已刪除訂單`;
+                // 訊息動態顯示
+                messageActive();
                 renderOrderList(dataOrderList);
             }).catch(function (error) {
                 console.log(error);
@@ -283,12 +294,23 @@ function deleteAllOrder(e) {
             }
         })
         .then(function (response) {
-            let dataOrderList = [];
             dataOrderList = response.data.orders;
+            // 顯示訊息
+            message.innerHTML = `已刪除全部訂單`;
+            // 訊息動態顯示
+            messageActive();
             renderOrderList(dataOrderList);
         }).catch(function (error) {
             console.log(error);
         })
+}
+
+// 訊息顯示
+function messageActive() {
+    message.classList.add('message--active');
+    setTimeout(function () {
+        message.classList.remove('message--active');
+    }, 1500);
 }
 
 
