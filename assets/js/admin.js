@@ -201,7 +201,6 @@ function checkList(e) {
     // console.log(index);
 
     modal.id = `modal${index}`;
-    // console.log(dataOrderList);
     let strModalBody = '';
     let strModalFooter = '';
 
