@@ -1,4 +1,5 @@
 .banner {
+    // 背景圖路徑
     @include bg-cover("../images/banner.jpg", 380px);
     width: 100%;
 
