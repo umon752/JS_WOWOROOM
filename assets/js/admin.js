@@ -69,17 +69,13 @@ function productTitle(data) {
         ary.push(item);
         ary.push(obj[item]);
         productTitle.push(ary);
-        // console.log(ary);
     })
 
-    // console.log(objAry);
-    console.log(productTitle);
 
     // 排序 (多到少)
     productTitle.sort(function (a, b) {
         return b[1] - a[1];
     });
-    console.log(productTitle);
 
     // 第三名之後的格式
     let ary = ["其他", 0];
@@ -277,6 +273,7 @@ function editOrderList(e) {
                 message.innerHTML = `已刪除訂單`;
                 // 訊息動態顯示
                 messageActive();
+                productTitle(dataOrderList);
                 renderOrderList(dataOrderList);
             }).catch(function (error) {
                 console.log(error);
@@ -299,6 +296,7 @@ function deleteAllOrder(e) {
             message.innerHTML = `已刪除全部訂單`;
             // 訊息動態顯示
             messageActive();
+            productTitle(dataOrderList);
             renderOrderList(dataOrderList);
         }).catch(function (error) {
             console.log(error);
