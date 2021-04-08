@@ -18,6 +18,10 @@ const deleteOrder = document.querySelector('.js-deleteOrderAll');
 const modal = document.querySelector('#modal');
 const modalBody = document.querySelector('.js-modalBody');
 const message = document.querySelector('.js-message');
+const btnGroup = document.querySelectorAll('.js-btnGroup');
+const chartTitle = document.querySelector('.js-chartTitle');
+
+
 
 
 
@@ -61,7 +65,7 @@ function productTitle(data) {
             }
         })
     })
-    console.log(obj);
+    // console.log(obj);
 
     objAry = Object.keys(obj);
     objAry.forEach(function (item) {
@@ -93,33 +97,38 @@ function productTitle(data) {
 }
 
 // 全產品類別營收比重資料處理
-// function productCategory(data) {
-//     let obj = {};
-//     let objAry = [];
-//     let productCategory = [];
-//     console.log(data);
-//     data.forEach(function (item) {
-//         item.products.forEach(function (value) {
-//             if (obj[value.category] === undefined) {
-//                 obj[value.category] = 1;
-//             } else {
-//                 obj[value.category] += 1;
-//             }
-//         })
+function productCategory(data) {
+    let obj = {};
+    let objAry = [];
+    let productCategory = [];
+    // console.log(data);
+    data.forEach(function (item) {
+        item.products.forEach(function (value) {
+            if (obj[value.category] === undefined) {
+                obj[value.category] = 1;
+            } else {
+                obj[value.category] += 1;
+            }
+        })
 
-//     })
-//     // console.log(obj);
-//     objAry = Object.keys(obj);
-//     objAry.forEach(function (item) {
-//         let ary = [];
-//         ary.push(item);
-//         ary.push(obj[item]);
-//         productCategory.push(ary);
-//     })
-//     // console.log(objAry);
-//     // console.log(productCategory);
-//     renderC3(productCategory);
-// }
+    })
+    // console.log(obj);
+    objAry = Object.keys(obj);
+    objAry.forEach(function (item) {
+        let ary = [];
+        ary.push(item);
+        ary.push(obj[item]);
+        productCategory.push(ary);
+    })
+
+    // 排序 (多到少)
+    productCategory.sort(function (a, b) {
+        return b[1] - a[1];
+    });
+
+    // console.log(productCategory);
+    renderC3(productCategory);
+}
 
 // 渲染圓餅圖
 function renderC3(array) {
@@ -131,10 +140,10 @@ function renderC3(array) {
             arrayName[item[0]] = colors[index];
         }
     })
-    console.log(arrayName);
+    // console.log(arrayName);
 
     const pieChart = c3.generate({
-        bindto: ".js-pie", // HTML 元素綁定
+        bindto: ".js-chart", // HTML 元素綁定
         data: {
             columns: array, // 資料存放
             type: "pie", // 圖表種類
@@ -142,6 +151,31 @@ function renderC3(array) {
         }
     });
 }
+
+// 點擊按鈕 圖表切換
+function toggleChart(e) {
+    let text = e.target.textContent;
+
+    // 移除.focus
+    btnGroup.forEach(function (item) {
+        item.classList.remove("focus");
+    })
+
+    if (text) {
+        // 標題
+        chartTitle.textContent = text;
+        // 圖表
+        if (text === '全產品類別營收比重') {
+            productCategory(dataOrderList);
+        } else {
+            productTitle(dataOrderList);
+        }
+    }
+}
+
+btnGroup.forEach(function (item) {
+    item.addEventListener('click', toggleChart, false);
+})
 
 
 
@@ -158,6 +192,7 @@ function getOrderList() {
             // console.log(dataOrderList);
             renderOrderList(dataOrderList);
             productTitle(dataOrderList);
+            // productCategory(dataOrderList);
         }).catch(function (error) {
             console.log(error);
         })
@@ -176,9 +211,7 @@ function renderOrderList(data) {
     <td>${item.user.year}/${item.user.month}/${item.user.date}</td>
     <td>${orderStatus(item.paid, item.id)}</td>
     <td>
-        <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">
-            delete
-        </a>
+        <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">delete</a>
     </td>
     </tr>`;
     });
@@ -204,7 +237,7 @@ function checkList(e) {
     let strModalBody = '';
     let strModalFooter = '';
 
-    dataOrderList[index].products.forEach(function (item, index) {
+    dataOrderList[index].products.forEach(function (item) {
         // console.log(dataOrderList[index]);
         strModalBody += `<li class="row align-items-center mb-2">        
         <span class="col-9 col-md-7">${item.title}</span>
@@ -231,8 +264,8 @@ function editOrderList(e) {
     e.preventDefault();
 
     // 修改訂單狀態
-    if (e.target.getAttribute('class') === 'btn text-primary-dark') {
-        let orderId = e.target.getAttribute('data-id');
+    if (e.target.dataset.id) {
+        let orderId = e.target.dataset.id;
         let obj = {
             "id": orderId,
             "paid": true
@@ -259,8 +292,8 @@ function editOrderList(e) {
     }
 
     // 刪除特定訂單
-    if (e.target.getAttribute('class') === 'material-icons h5 text-secondary-light') {
-        let orderId = e.target.getAttribute('data-id');
+    if (e.target.textContent === "delete") {
+        let orderId = e.target.dataset.id;
 
         axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders/${orderId}`, {
                 headers: {

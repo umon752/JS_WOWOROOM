@@ -39,9 +39,19 @@
 
     <!-- 全品項營收比重 -->
     <section class="container py-7" data-aos="fade-up">
-        <h3 class="h4 text-dark text-center mb-4">全品項營收比重</h3>
-        <!-- 圓餅圖 -->
-        <div class="js-pie mb-5"></div>
+        <div class=" d-flex flex-column align-items-center">
+            <!-- 標題 -->
+            <h3 class="js-chartTitle h4 text-dark text-center order-md-2 mb-4">全品項營收比重</h3>
+            <!-- 圓餅圖 -->
+            <div class="js-chart order-md-3 mb-3"></div>
+            <!-- 按鈕 -->
+            <div class="btn-group btn-group-toggle order-md-1 align-self-md-start mb-5" data-toggle="buttons">
+                <label class="js-btnGroup btn btn-sm btn-outline-secondary active"><input type="radio"
+                        checked>全品項營收比重</label>
+                <label class="js-btnGroup btn btn-sm btn-outline-secondary"><input type="radio">全產品類別營收比重</label>
+            </div>
+        </div>
+
         <!-- table -->
         <div class="text-right">
             <a href="#" class="js-deleteOrderAll btn btn-outline-dark mb-2">清除全部訂單</a>
@@ -141,9 +151,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content px-3">
                 <div class="modal-header border-0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="modal-body py-0">
                     <div

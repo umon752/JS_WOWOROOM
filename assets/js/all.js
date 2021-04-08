@@ -140,9 +140,9 @@ function filterProductList(e) {
 // 加入購物車
 function addCartItem(e) {
     e.preventDefault();
-    if (e.target.getAttribute('class') == 'btn btn-dark rounded-0 w-100 mb-2') {
+    if (e.target.dataset.id) {
         // 產品 ID
-        let productId = e.target.getAttribute('data-id');
+        let productId = e.target.dataset.id;
         // 數量
         let num = 1;
 
@@ -219,9 +219,7 @@ function renderCartList(data, finalTotal) {
     </li>
     <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
         <h5 class="h6"><span class="d-md-none">金額：</span>NT$${item.product.price * item.quantity}</h5>
-        <a href="#" class="material-icons text-dark" data-id="${item.id}">
-            close
-        </a>
+        <a href="#" class="material-icons text-dark" data-id="${item.id}">close</a>
     </li>
     </ul>`
         })
@@ -254,8 +252,8 @@ function deleteAllCartList(e) {
 function deleteCartItem(e) {
     e.preventDefault();
 
-    if (e.target.getAttribute('class') === 'material-icons text-dark') {
-        let cartId = e.target.getAttribute('data-id');
+    if (e.target.textContent === "close") {
+        let cartId = e.target.dataset.id;
         // console.log(cartId);
 
         axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
