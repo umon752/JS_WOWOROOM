@@ -100,6 +100,7 @@ function getProductList() {
     })
 }
 
+// 產品列表的 HTML
 function renderStr(item) {
     return `<li class="col-6 col-md-4 col-lg-3 mb-4">
     <div class="productTag bg-dark text-white py-2 px-4">新品</div>
@@ -208,14 +209,17 @@ function renderCartList(data, finalTotal) {
         data.forEach(function (item) {
             str += `<ul class="row align-items-center border-bottom pb-3 mb-3">
     <li class="col-md-4 col-lg-3 d-flex flex-column flex-md-row align-items-md-center">
-        <img src=${item.product.images} class="cartImg mb-2 mr-md-3">
+        <img src=${item.product.images} class="cartImg mb-2 mr-md-3 mb-md-0">
         <h4 class="h6"><span class="d-md-none">品名：</span>${item.product.title}</h4>
     </li>
     <li class="col-md-2 col-lg-3">
         <h5 class="h6"><span class="d-md-none">單價：</span>NT$${item.product.price}</h5>
     </li>
-    <li class="col-md-2 col-lg-3">
-        <div><span class="d-md-none">數量：</span>${item.quantity}</div>
+    <li class="col-md-2 col-lg-3 d-flex align-items-center">
+    <span class="d-md-none">數量：</span>
+        <a href="#" class="material-icons text-secondary h5 mr-2" data-id="${item.id}">remove</a>
+        ${item.quantity}
+        <a href="#" class="material-icons text-secondary h5 ml-2" data-id="${item.id}">add</a>
     </li>
     <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
         <h5 class="h6"><span class="d-md-none">金額：</span>NT$${item.product.price * item.quantity}</h5>
@@ -248,12 +252,13 @@ function deleteAllCartList(e) {
 }
 
 
-// 刪除購物車內特定產品
-function deleteCartItem(e) {
+// 更動購物車產品
+function changeCartItem(e) {
     e.preventDefault();
 
+    let cartId = e.target.dataset.id;
+    // 刪除購物車內特定產品
     if (e.target.textContent === "close") {
-        let cartId = e.target.dataset.id;
         // console.log(cartId);
 
         axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
@@ -269,6 +274,77 @@ function deleteCartItem(e) {
         }).catch(function (error) {
             console.log(error);
         })
+    }
+
+    // 增加購物車產品數量
+    if (e.target.textContent === "add") {
+        // 數量
+        let num = 1;
+        // 該產品已存在購物車中，數量 +1
+        dataCartList.forEach(function (item) {
+            if (item.id === cartId) {
+                num = item.quantity += 1;
+            }
+        })
+
+        let obj = {
+            "id": cartId,
+            "quantity": num
+        };
+
+        axios.patch(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
+                "data": obj
+            }, {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            .then(function (response) {
+                dataCartList = response.data.carts;
+                // 最後總金額
+                let finalTotal = response.data.finalTotal;
+                renderCartList(dataCartList, finalTotal);
+            }).catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    // 減少購物車產品數量
+    if (e.target.textContent === "remove") {
+        // 數量
+        let num = 1;
+        // 該產品已存在購物車中，數量 +1
+        dataCartList.forEach(function (item) {
+            if (item.id === cartId) {
+                num = item.quantity -= 1;
+            }
+        })
+
+        // 數量小於 1 時中斷
+        if (num < 1) {
+            return;
+        }
+
+        let obj = {
+            "id": cartId,
+            "quantity": num
+        };
+
+        axios.patch(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
+                "data": obj
+            }, {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            .then(function (response) {
+                dataCartList = response.data.carts;
+                // 最後總金額
+                let finalTotal = response.data.finalTotal;
+                renderCartList(dataCartList, finalTotal);
+            }).catch(function (error) {
+                console.log(error);
+            })
     }
 }
 
@@ -364,6 +440,6 @@ function messageActive() {
  */
 productList.addEventListener('click', addCartItem, false);
 deleteCart.addEventListener('click', deleteAllCartList, false);
-cartList.addEventListener('click', deleteCartItem, false);
+cartList.addEventListener('click', changeCartItem, false);
 selectItem.addEventListener('change', filterProductList, false);
 formSend.addEventListener('click', createOrder, false);

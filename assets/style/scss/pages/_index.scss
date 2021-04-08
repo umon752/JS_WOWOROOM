@@ -125,6 +125,7 @@
     width: 100%;
 
     @include media-breakpoint-up(md) {
+        width: 80px;
         height: 80px;
     }
 }
