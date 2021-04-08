@@ -252,8 +252,8 @@ function deleteAllCartList(e) {
 }
 
 
-// 更動購物車產品
-function changeCartItem(e) {
+// 修改數量、刪除購物車內特定產品
+function editCartItem(e) {
     e.preventDefault();
 
     let cartId = e.target.dataset.id;
@@ -440,6 +440,6 @@ function messageActive() {
  */
 productList.addEventListener('click', addCartItem, false);
 deleteCart.addEventListener('click', deleteAllCartList, false);
-cartList.addEventListener('click', changeCartItem, false);
+cartList.addEventListener('click', editCartItem, false);
 selectItem.addEventListener('change', filterProductList, false);
 formSend.addEventListener('click', createOrder, false);
