@@ -2,6 +2,7 @@
  * DOM
  */
 const api_path = 'umon752';
+const baseUrl = "https://hexschoollivejs.herokuapp.com";
 const token = 'oXQlr3K4qDTYUtYt4dv53DGCS3V2';
 const productList = document.querySelector('.js-products');
 const cartList = document.querySelector('.js-carts');
@@ -29,9 +30,9 @@ let dataCartList = [];
  * init
  */
 function init() {
+    loading();
     getProductList();
     getCartList();
-    loading();
 }
 init();
 
@@ -71,30 +72,31 @@ function loading() {
             delay: 1000
         });
 
+    window.onload = function () {
+        setTimeout(function () {
+            // loading 消失
+            loading.classList.add('loading--fadeOut');
 
+            // Anime 停止
+            animation.pause();
 
-    // loading 消失
-    setTimeout(function () {
-        loading.classList.add('loading--fadeOut');
-        // Anime 停止
-        animation.pause();
-        // 載入 AOS
-        AOS.init({
-            easing: 'ease',
-            duration: 800,
-            once: true
-        });
-    }, 1800)
-}
-
-
+            // 載入 AOS
+            AOS.init({
+                easing: 'ease',
+                duration: 800,
+                once: true
+            });
+        }, 1200);
+    }
+};
 
 // 取得產品列表
 function getProductList() {
-    axios.get(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/products`).
+    axios.get(`${baseUrl}/api/livejs/v1/customer/${api_path}/products`).
     then(function (response) {
         dataProductList = response.data.products;
         renderProductList();
+        filterSelect();
     }).catch(function (error) {
         console.log(error);
     })
@@ -121,6 +123,24 @@ function renderProductList() {
         str += renderStr(item);
     })
     productList.innerHTML = str;
+}
+
+// 渲染產品列表
+function filterSelect() {
+
+    let unSort = dataProductList.map(function (item) {
+        return item.category;
+    })
+    let sorted = unSort.filter(function (item, i) {
+        return unSort.indexOf(item) === i;
+    })
+    sorted.unshift("全部");
+
+    let str = '';
+    sorted.forEach(function (item) {
+        str += `<option value=${item}>${item}</option>`
+    })
+    selectItem.innerHTML = str;
 }
 
 // 篩選產品列表
@@ -155,11 +175,11 @@ function addCartItem(e) {
         })
 
         let obj = {
-            "productId": productId,
-            "quantity": num
+            productId: productId,
+            quantity: num
         };
         // console.log(obj);
-        axios.post(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
+        axios.post(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
             data: obj
         }).
         then(function (response) {
@@ -181,7 +201,7 @@ function addCartItem(e) {
 
 // 取得購物車列表
 function getCartList() {
-    axios.get(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`).
+    axios.get(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`).
     then(function (response) {
         dataCartList = response.data.carts;
         // 最後總金額
@@ -217,9 +237,9 @@ function renderCartList(data, finalTotal) {
     </li>
     <li class="col-md-2 col-lg-3 d-flex align-items-center">
     <span class="d-md-none">數量：</span>
-        <a href="#" class="material-icons text-secondary h5 mr-2" data-id="${item.id}">remove</a>
+        <button class="material-icons btn text-secondary h5 p-1 mr-2" data-id="${item.id}" ${quantityStatus(item.quantity)}>remove</button>
         ${item.quantity}
-        <a href="#" class="material-icons text-secondary h5 ml-2" data-id="${item.id}">add</a>
+        <button class="material-icons btn text-secondary h5 p-1 ml-2" data-id="${item.id}">add</button>
     </li>
     <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
         <h5 class="h6"><span class="d-md-none">金額：</span>NT$${item.product.price * item.quantity}</h5>
@@ -232,23 +252,33 @@ function renderCartList(data, finalTotal) {
     cartList.innerHTML = strTitle + str;
 }
 
+// 刪除數量按鈕狀態條件
+function quantityStatus(quantity) {
+    if (quantity === 1) {
+        return `disabled`;
+    } else {
+        return;
+    }
+}
+
 // 清除購物車內全部產品
 function deleteAllCartList(e) {
     e.preventDefault();
-
-    axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`).
-    then(function (response) {
-        dataCartList = response.data.carts;
-        // 最後總金額
-        let finalTotal = response.data.finalTotal;
-        // 顯示訊息
-        message.innerHTML = `已刪除所有品項`;
-        // 訊息動態顯示
-        messageActive();
-        renderCartList(dataCartList, finalTotal);
-    }).catch(function (error) {
-        console.log(error);
-    })
+    if (dataCartList.length !== 0) {
+        axios.delete(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`).
+        then(function (response) {
+            dataCartList = response.data.carts;
+            // 最後總金額
+            let finalTotal = response.data.finalTotal;
+            // 顯示訊息
+            message.innerHTML = `已刪除所有品項`;
+            // 訊息動態顯示
+            messageActive();
+            renderCartList(dataCartList, finalTotal);
+        }).catch(function (error) {
+            console.log(error);
+        })
+    }
 }
 
 
@@ -261,7 +291,7 @@ function editCartItem(e) {
     if (e.target.textContent === "close") {
         // console.log(cartId);
 
-        axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
+        axios.delete(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
         then(function (response) {
             dataCartList = response.data.carts;
             // 最後總金額
@@ -288,11 +318,11 @@ function editCartItem(e) {
         })
 
         let obj = {
-            "id": cartId,
-            "quantity": num
+            id: cartId,
+            quantity: num
         };
 
-        axios.patch(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
+        axios.patch(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
                 "data": obj
             }, {
                 headers: {
@@ -326,11 +356,11 @@ function editCartItem(e) {
         }
 
         let obj = {
-            "id": cartId,
-            "quantity": num
+            id: cartId,
+            quantity: num
         };
 
-        axios.patch(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`, {
+        axios.patch(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
                 "data": obj
             }, {
                 headers: {
@@ -358,14 +388,14 @@ function createOrder(e) {
     const address = document.getElementById('address');
     const transaction = document.getElementById('transaction');
 
-    const nameRex = /[^\u4e00-\u9fa5]/;
-    const telRex = /^(09)[0-9]{8}$/;
+    const nameRex = /[^\u4e00-\u9fa5-\a-zA-Z]/;
+    const telRex = /^[0-9\-]{7,11}$/;
     const emailRex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9])+$/;
 
     const dateObj = new Date();
-    let date = dateObj.getDate() //15
-    let month = dateObj.getMonth() + 1 //6
-    let year = dateObj.getFullYear() //2016
+    let date = dateObj.getDate()
+    let month = dateObj.getMonth() + 1
+    let year = dateObj.getFullYear()
 
     if (month < 10) {
         month = `0${month}`;
@@ -374,54 +404,68 @@ function createOrder(e) {
         date = `0${date}`;
     }
 
-    if (name.value === '' || nameRex.test(name.value) || name.value.length < 2) {
-        verifyText[0].textContent = '請輸入中文姓名';
-        name.focus();
-    } else if (tel.value === '' || !telRex.test(tel.value)) {
-        verifyText[0].textContent = '';
-        verifyText[1].textContent = '請輸入電話號碼';
-        tel.focus();
-    } else if (email.value === '' || !emailRex.test(email.value)) {
-        verifyText[1].textContent = '';
-        verifyText[2].textContent = '請輸入 Email';
-        email.focus();
-    } else if (address.value === '') {
-        verifyText[2].textContent = '';
-        verifyText[3].textContent = '請輸入地址';
-        address.focus();
+    if (dataCartList.length === 0) {
+        // 顯示訊息
+        message.innerHTML = `購物車尚未有商品`;
+        // 訊息動態顯示
+        messageActive();
     } else {
-        let obj = {
-            user: {
-                name: name.value,
-                tel: tel.value,
-                email: email.value,
-                address: address.value,
-                payment: transaction.value,
-                year: year,
-                month: month,
-                date: date
-            }
-        };
+        if (name.value === '' || nameRex.test(name.value) || name.value.length < 2) {
+            verifyText[0].textContent = '請輸入姓名';
+            name.focus();
+        } else if (tel.value === '') {
+            verifyText[0].textContent = '';
+            verifyText[1].textContent = '請輸入電話號碼';
+            tel.focus();
+        } else if (!telRex.test(tel.value)) {
+            verifyText[0].textContent = '';
+            verifyText[1].textContent = '電話號碼輸入有誤';
+            tel.focus();
+        } else if (email.value === '' || !emailRex.test(email.value)) {
+            verifyText[1].textContent = '';
+            verifyText[2].textContent = '請輸入 Email';
+            email.focus();
+        } else if (address.value === '') {
+            verifyText[2].textContent = '';
+            verifyText[3].textContent = '請輸入地址';
+            address.focus();
+        } else {
+            let obj = {
+                user: {
+                    name: name.value,
+                    tel: tel.value,
+                    email: email.value,
+                    address: address.value,
+                    payment: transaction.value,
+                    year: year,
+                    month: month,
+                    date: date
+                }
+            };
 
-        axios.post(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/orders`, {
-            "data": obj
-        }).then(function (response) {
-            // 清除驗證文字
-            verifyText.forEach(function (item) {
-                item.textContent = '';
+            axios.post(`${baseUrl}/api/livejs/v1/customer/${api_path}/orders`, {
+                "data": obj
+            }).then(function (response) {
+                console.log(response.data);
+                // 清除驗證文字
+                verifyText.forEach(function (item) {
+                    item.textContent = '';
+                })
+                // 清除 input 
+                form.reset();
+                // 清除購物車產品
+                cartList.innerHTML = `<div class="text-primary text-center py-4">目前尚未有商品</div>`;
+                // 總金額歸 0
+                totalMoney.textContent = `NT$0`;
+                // 顯示訊息
+                message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
+                已送出預訂資料`;
+                // 訊息動態顯示
+                messageActive();
+            }).catch(function (error) {
+                console.log(error);
             })
-            // 清除 input 
-            form.reset();
-            // 清除購物車產品
-            cartList.innerHTML = `<div class="text-primary text-center py-4">目前尚未有商品</div>`;
-            // 顯示訊息
-            message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-            已送出預訂資料`;
-            // 訊息動態顯示
-            messageActive();
-        }).catch(function (error) {
-            console.log(error);
-        })
+        }
     }
 }
 

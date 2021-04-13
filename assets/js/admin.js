@@ -12,6 +12,7 @@ AOS.init({
  * DOM
  */
 const api_path = 'umon752';
+const baseUrl = "https://hexschoollivejs.herokuapp.com";
 const token = 'oXQlr3K4qDTYUtYt4dv53DGCS3V2';
 const tbody = document.querySelector('.js-tbody');
 const deleteOrder = document.querySelector('.js-deleteOrderAll');
@@ -20,8 +21,7 @@ const modalBody = document.querySelector('.js-modalBody');
 const message = document.querySelector('.js-message');
 const btnGroup = document.querySelectorAll('.js-btnGroup');
 const chartTitle = document.querySelector('.js-chartTitle');
-
-
+const chart = document.querySelector('.js-chart');
 
 
 
@@ -52,82 +52,91 @@ init();
 
 // 全品項營收比重資料處理
 function productTitle(data) {
-    let obj = {};
-    let objAry = [];
-    let productTitle = [];
-    // console.log(data);
-    data.forEach(function (item) {
-        item.products.forEach(function (value) {
-            if (obj[value.title] === undefined) {
-                obj[value.title] = value.price;
-            } else {
-                obj[value.title] = value.price + value.price;
-            }
+    if (data.length === 0) {
+        chart.innerHTML = `<div class="h5-md text-primary py-4">目前尚未有訂單</div>`;
+    } else {
+        let obj = {};
+        let objAry = [];
+        let productTitle = [];
+        // console.log(data);
+        data.forEach(function (item) {
+            item.products.forEach(function (value) {
+                if (obj[value.title] === undefined) {
+                    obj[value.title] = value.price;
+                } else {
+                    obj[value.title] = value.price + value.price;
+                }
+            })
         })
-    })
-    // console.log(obj);
+        // console.log(obj);
 
-    objAry = Object.keys(obj);
-    objAry.forEach(function (item) {
-        let ary = [];
-        ary.push(item);
-        ary.push(obj[item]);
-        productTitle.push(ary);
-    })
+        objAry = Object.keys(obj);
+        objAry.forEach(function (item) {
+            let ary = [];
+            ary.push(item);
+            ary.push(obj[item]);
+            productTitle.push(ary);
+        })
 
+        // 排序 (多到少)
+        productTitle.sort(function (a, b) {
+            return b[1] - a[1];
+        });
 
-    // 排序 (多到少)
-    productTitle.sort(function (a, b) {
-        return b[1] - a[1];
-    });
+        if (productTitle.length >= 4) {
+            // 第三名之後的格式
+            let ary = ["其他", 0];
 
-    // 第三名之後的格式
-    let ary = ["其他", 0];
-
-    productTitle.forEach(function (item, index) {
-        if (index > 2) {
-            ary[1] += item[1];
+            productTitle.forEach(function (item, index) {
+                if (index > 2) {
+                    ary[1] += item[1];
+                }
+            })
+            // 將 ary 放到 productTitle 陣列第 4 筆
+            productTitle.splice(3, 0, ary);
+            // 刪除 productTitle 陣列第 4 筆之後的資料
+            productTitle.splice(4, productTitle.length - 1);
         }
-    })
-    // 將 ary 放到 productTitle 陣列第 4 筆
-    productTitle.splice(3, 0, ary);
-    // 刪除 productTitle 陣列第 4 筆之後的資料
-    productTitle.splice(4, productTitle.length - 1);
-    renderC3(productTitle);
+        renderC3(productTitle);
+    }
 }
 
 // 全產品類別營收比重資料處理
 function productCategory(data) {
-    let obj = {};
-    let objAry = [];
-    let productCategory = [];
-    // console.log(data);
-    data.forEach(function (item) {
-        item.products.forEach(function (value) {
-            if (obj[value.category] === undefined) {
-                obj[value.category] = 1;
-            } else {
-                obj[value.category] += 1;
-            }
+    if (data.length === 0) {
+        chart.innerHTML = `<div class="h5-md text-primary py-4">目前尚未有訂單</div>`;
+    } else {
+        let obj = {};
+        let objAry = [];
+        let productCategory = [];
+        // console.log(data);
+        data.forEach(function (item) {
+            item.products.forEach(function (value) {
+                if (obj[value.category] === undefined) {
+                    obj[value.category] = 1;
+                } else {
+                    obj[value.category] += 1;
+                }
+            })
+
+        })
+        // console.log(obj);
+        objAry = Object.keys(obj);
+        objAry.forEach(function (item) {
+            let ary = [];
+            ary.push(item);
+            ary.push(obj[item]);
+            productCategory.push(ary);
         })
 
-    })
-    // console.log(obj);
-    objAry = Object.keys(obj);
-    objAry.forEach(function (item) {
-        let ary = [];
-        ary.push(item);
-        ary.push(obj[item]);
-        productCategory.push(ary);
-    })
+        // 排序 (多到少)
+        productCategory.sort(function (a, b) {
+            return b[1] - a[1];
+        });
 
-    // 排序 (多到少)
-    productCategory.sort(function (a, b) {
-        return b[1] - a[1];
-    });
-
-    // console.log(productCategory);
-    renderC3(productCategory);
+        // console.log(productCategory);
+        renderC3(productCategory);
+    }
 }
 
 // 渲染圓餅圖
@@ -173,15 +182,9 @@ function toggleChart(e) {
     }
 }
 
-btnGroup.forEach(function (item) {
-    item.addEventListener('click', toggleChart, false);
-})
-
-
-
 // 取得訂單列表
 function getOrderList() {
-    axios.get(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders`, {
+    axios.get(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
             headers: {
                 'Authorization': token
             }
@@ -203,17 +206,17 @@ function renderOrderList(data) {
     let str = '';
     data.forEach(function (item, index) {
         str += `<tr>
-    <td>${item.createdAt}</td>
-    <td>${item.user.name} ${item.user.tel}</td>
-    <td>${item.user.address}</td>
-    <td>${item.user.email}</td>
-    <td><a href="#" class="js-check text-primary-dark" data-toggle="modal" data-target="#modal${index}">查看訂單</a></td>
-    <td>${item.user.year}/${item.user.month}/${item.user.date}</td>
-    <td>${orderStatus(item.paid, item.id)}</td>
-    <td>
-        <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">delete</a>
-    </td>
-    </tr>`;
+        <td>${item.createdAt}</td>
+        <td>${item.user.name} ${item.user.tel}</td>
+        <td>${item.user.address}</td>
+        <td>${item.user.email}</td>
+        <td><a href="#" class="js-check text-primary-dark" data-toggle="modal" data-target="#modal${index}">查看訂單</a></td>
+        <td>${item.user.year}/${item.user.month}/${item.user.date}</td>
+        <td>${orderStatus(item.paid, item.id)}</td>
+        <td>
+            <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">delete</a>
+        </td>
+        </tr>`;
     });
 
     tbody.innerHTML = str;
@@ -231,14 +234,12 @@ function checkList(e) {
 
     // 擷取 '#modal${index}' ${index} 字串
     let index = e.target.dataset.target.slice(-1);
-    // console.log(index);
 
     modal.id = `modal${index}`;
     let strModalBody = '';
     let strModalFooter = '';
 
     dataOrderList[index].products.forEach(function (item) {
-        // console.log(dataOrderList[index]);
         strModalBody += `<li class="row align-items-center mb-2">        
         <span class="col-9 col-md-7">${item.title}</span>
         <span class="col-3 col-md-2">${item.quantity}</span>
@@ -253,7 +254,7 @@ function checkList(e) {
 // 訂單狀態條件
 function orderStatus(paid, id) {
     if (paid) {
-        return `<button class="btn text-secondary" disabled>已處理</button>`;
+        return `<button class="btn text-secondary" data-id="${id}">已處理</button>`;
     } else {
         return `<button class="btn text-primary-dark" data-id="${id}">未處理</button>`;
     }
@@ -263,15 +264,16 @@ function orderStatus(paid, id) {
 function editOrderList(e) {
     e.preventDefault();
 
+
     // 修改訂單狀態
-    if (e.target.dataset.id) {
+    if (e.target.textContent === '未處理') {
         let orderId = e.target.dataset.id;
         let obj = {
-            "id": orderId,
-            "paid": true
+            id: orderId,
+            paid: true
         };
 
-        axios.put(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders`, {
+        axios.put(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
                 "data": obj
             }, {
                 headers: {
@@ -282,20 +284,24 @@ function editOrderList(e) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
                 message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-            訂單狀態修改成功`;
+                訂單狀態修改成功`;
                 // 訊息動態顯示
                 messageActive();
-                renderOrderList(dataOrderList);
+                e.target.textContent = '已處理';
+                e.target.setAttribute('class', 'btn text-secondary');
             }).catch(function (error) {
                 console.log(error);
             })
+    } else if (e.target.textContent === '已處理') {
+        e.target.textContent = '未處理';
+        e.target.setAttribute('class', 'btn text-primary-dark');
     }
 
     // 刪除特定訂單
     if (e.target.textContent === "delete") {
         let orderId = e.target.dataset.id;
 
-        axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders/${orderId}`, {
+        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders/${orderId}`, {
                 headers: {
                     'Authorization': token
                 }
@@ -318,22 +324,25 @@ function editOrderList(e) {
 function deleteAllOrder(e) {
     e.preventDefault();
 
-    axios.delete(`https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders`, {
-            headers: {
-                'Authorization': token
-            }
-        })
-        .then(function (response) {
-            dataOrderList = response.data.orders;
-            // 顯示訊息
-            message.innerHTML = `已刪除全部訂單`;
-            // 訊息動態顯示
-            messageActive();
-            productTitle(dataOrderList);
-            renderOrderList(dataOrderList);
-        }).catch(function (error) {
-            console.log(error);
-        })
+    if (dataOrderList.length !== 0) {
+        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
+                headers: {
+                    'Authorization': token
+                }
+            })
+            .then(function (response) {
+                dataOrderList = response.data.orders;
+                // 顯示訊息
+                message.innerHTML = `已刪除全部訂單`;
+                // 訊息動態顯示
+                messageActive();
+                productTitle(dataOrderList);
+                renderOrderList(dataOrderList);
+
+            }).catch(function (error) {
+                console.log(error);
+            })
+    }
 }
 
 // 訊息顯示
@@ -350,4 +359,7 @@ function messageActive() {
  * Controller
  */
 tbody.addEventListener('click', editOrderList, false);
+btnGroup.forEach(function (item) {
+    item.addEventListener('click', toggleChart, false);
+})
 deleteOrder.addEventListener('click', deleteAllOrder, false);
