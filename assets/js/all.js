@@ -1,9 +1,6 @@
 /**
  * DOM
  */
-const api_path = 'umon752';
-const baseUrl = "https://hexschoollivejs.herokuapp.com";
-const token = 'oXQlr3K4qDTYUtYt4dv53DGCS3V2';
 const productList = document.querySelector('.js-products');
 const cartList = document.querySelector('.js-carts');
 const totalMoney = document.querySelector('.js-finalTotal');
@@ -111,8 +108,8 @@ function renderStr(item) {
     </a>
     <a href="#" class="btn btn-dark rounded-0 w-100 mb-2" data-id="${item.id}">加入購物車</a>
     <h4 class="font-size-sm h6-md mb-md-2"><a href="#" class="text-dark">${item.title}</a></h4>
-    <del class="font-size-sm h6-md">NT$${item.origin_price}</del>
-    <h5 class="h6 h5-md">NT$${item.price}</h5>
+    <del class="font-size-sm h6-md">NT$${toThousands(item.origin_price)}</del>
+    <h5 class="h6 h5-md">NT$${toThousands(item.price)}</h5>
     </li>`
 }
 
@@ -242,13 +239,13 @@ function renderCartList(data, finalTotal) {
         <button class="material-icons btn text-secondary h5 p-1 ml-2" data-id="${item.id}">add</button>
     </li>
     <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
-        <h5 class="h6"><span class="d-md-none">金額：</span>NT$${item.product.price * item.quantity}</h5>
+        <h5 class="h6"><span class="d-md-none">金額：</span>NT$${toThousands(item.product.price * item.quantity)}</h5>
         <a href="#" class="material-icons text-dark" data-id="${item.id}">close</a>
     </li>
     </ul>`
         })
     }
-    totalMoney.textContent = `NT$${finalTotal}`;
+    totalMoney.textContent = `NT$${toThousands(finalTotal)}`;
     cartList.innerHTML = strTitle + str;
 }
 
@@ -392,18 +389,6 @@ function createOrder(e) {
     const telRex = /^[0-9\-]{7,11}$/;
     const emailRex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9])+$/;
 
-    const dateObj = new Date();
-    let date = dateObj.getDate()
-    let month = dateObj.getMonth() + 1
-    let year = dateObj.getFullYear()
-
-    if (month < 10) {
-        month = `0${month}`;
-    }
-    if (date < 10) {
-        date = `0${date}`;
-    }
-
     if (dataCartList.length === 0) {
         // 顯示訊息
         message.innerHTML = `購物車尚未有商品`;
@@ -436,17 +421,13 @@ function createOrder(e) {
                     tel: tel.value,
                     email: email.value,
                     address: address.value,
-                    payment: transaction.value,
-                    year: year,
-                    month: month,
-                    date: date
+                    payment: transaction.value
                 }
             };
 
             axios.post(`${baseUrl}/api/livejs/v1/customer/${api_path}/orders`, {
                 "data": obj
             }).then(function (response) {
-                console.log(response.data);
                 // 清除驗證文字
                 verifyText.forEach(function (item) {
                     item.textContent = '';

@@ -11,9 +11,6 @@ AOS.init({
 /**
  * DOM
  */
-const api_path = 'umon752';
-const baseUrl = "https://hexschoollivejs.herokuapp.com";
-const token = 'oXQlr3K4qDTYUtYt4dv53DGCS3V2';
 const tbody = document.querySelector('.js-tbody');
 const deleteOrder = document.querySelector('.js-deleteOrderAll');
 const modal = document.querySelector('#modal');
@@ -203,14 +200,32 @@ function getOrderList() {
 // 渲染訂單列表
 function renderOrderList(data) {
     let str = '';
+
+
+
     data.forEach(function (item, index) {
+        // 訂單日期處理
+        const dateObj = new Date(item.createdAt * 1000);
+        let date = dateObj.getDate()
+        let month = dateObj.getMonth() + 1
+        let year = dateObj.getFullYear()
+
+        if (month < 10) {
+            month = `0${month}`;
+        }
+        if (date < 10) {
+            date = `0${date}`;
+        }
+
+        let orderDate = `${year}/${month}/${date}`;
+
         str += `<tr>
-        <td>${item.createdAt}</td>
+        <td>${item.id}</td>
         <td>${item.user.name} ${item.user.tel}</td>
         <td>${item.user.address}</td>
         <td>${item.user.email}</td>
         <td><a href="#" class="js-check text-primary-dark" data-toggle="modal" data-target="#modal${index}">查看訂單</a></td>
-        <td>${item.user.year}/${item.user.month}/${item.user.date}</td>
+        <td>${orderDate}</td>
         <td>${orderStatus(item.paid, item.id)}</td>
         <td>
             <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">delete</a>
@@ -241,10 +256,10 @@ function checkList(e) {
     dataOrderList[index].products.forEach(function (item) {
         strModalBody += `<li class="row align-items-center mb-2">        
         <span class="col-9 col-md-7">${item.title}</span>
-        <span class="col-3 col-md-2">${item.quantity}</span>
-        <span class="col-md-3 d-none d-md-block">NT$${item.price*item.quantity}</span>
+        <span class="col-3 col-md-2">x${item.quantity}</span>
+        <span class="col-md-3 d-none d-md-block">NT$${toThousands(item.price*item.quantity)}</span>
         </li>`;
-        strModalFooter = `<div class="border-top border-secondary-light text-right pt-2 mt-3">總金額<span class="ml-3">NT$${dataOrderList[index].total}</span></div>`
+        strModalFooter = `<div class="border-top border-secondary-light text-right pt-2 mt-3">總金額<span class="ml-3">NT$${toThousands(dataOrderList[index].total)}</span></div>`
     })
 
     modalBody.innerHTML = strModalBody + strModalFooter;
