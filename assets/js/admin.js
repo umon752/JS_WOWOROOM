@@ -149,7 +149,6 @@ function renderC3(array) {
             arrayName[item[0]] = colors[index];
         }
     })
-    // console.log(arrayName);
 
     const pieChart = c3.generate({
         bindto: ".js-chart", // HTML 元素綁定
@@ -192,10 +191,10 @@ function getOrderList() {
         .then(function (response) {
             // 訂單列表資料
             dataOrderList = response.data.orders;
-            // console.log(dataOrderList);
-            renderOrderList(dataOrderList);
+            // 重新渲染圖表
             productTitle(dataOrderList);
-            // productCategory(dataOrderList);
+            // 重新訂單列表
+            renderOrderList(dataOrderList);
         }).catch(function (error) {
             console.log(error);
         })
@@ -254,9 +253,9 @@ function checkList(e) {
 // 訂單狀態條件
 function orderStatus(paid, id) {
     if (paid) {
-        return `<button class="btn text-secondary" data-id="${id}">已處理</button>`;
+        return `<button class="btn text-secondary" data-id="${id}" data-paid="${paid}">已處理</button>`;
     } else {
-        return `<button class="btn text-primary-dark" data-id="${id}">未處理</button>`;
+        return `<button class="btn text-primary-dark" data-id="${id}" data-paid="${paid}">未處理</button>`;
     }
 }
 
@@ -264,13 +263,22 @@ function orderStatus(paid, id) {
 function editOrderList(e) {
     e.preventDefault();
 
+    let orderId = e.target.dataset.id;
 
     // 修改訂單狀態
-    if (e.target.textContent === '未處理') {
-        let orderId = e.target.dataset.id;
+    if (e.target.dataset.paid) {
+        let paidStatus = e.target.dataset.paid;
+        let newStatus;
+
+        if (paidStatus == 'true') {
+            newStatus = false;
+        } else {
+            newStatus = true;
+        }
+
         let obj = {
             id: orderId,
-            paid: true
+            paid: newStatus
         };
 
         axios.put(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
@@ -284,22 +292,20 @@ function editOrderList(e) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
                 message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-                訂單狀態修改成功`;
+                    訂單狀態修改成功`;
                 // 訊息動態顯示
                 messageActive();
-                e.target.textContent = '已處理';
-                e.target.setAttribute('class', 'btn text-secondary');
+                // 重新渲染訂單列表
+                renderOrderList(dataOrderList);
             }).catch(function (error) {
                 console.log(error);
             })
-    } else if (e.target.textContent === '已處理') {
-        e.target.textContent = '未處理';
-        e.target.setAttribute('class', 'btn text-primary-dark');
     }
+
+
 
     // 刪除特定訂單
     if (e.target.textContent === "delete") {
-        let orderId = e.target.dataset.id;
 
         axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders/${orderId}`, {
                 headers: {
@@ -312,7 +318,9 @@ function editOrderList(e) {
                 message.innerHTML = `已刪除訂單`;
                 // 訊息動態顯示
                 messageActive();
+                // 重新渲染圖表
                 productTitle(dataOrderList);
+                // 重新渲染訂單列表
                 renderOrderList(dataOrderList);
             }).catch(function (error) {
                 console.log(error);
@@ -336,9 +344,10 @@ function deleteAllOrder(e) {
                 message.innerHTML = `已刪除全部訂單`;
                 // 訊息動態顯示
                 messageActive();
+                // 重新渲染圖表
                 productTitle(dataOrderList);
+                // 重新渲染訂單列表
                 renderOrderList(dataOrderList);
-
             }).catch(function (error) {
                 console.log(error);
             })
