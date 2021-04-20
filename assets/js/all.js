@@ -379,11 +379,11 @@ function editCartItem(e) {
 function createOrder(e) {
     e.preventDefault();
 
-    const name = document.getElementById('name');
-    const tel = document.getElementById('tel');
-    const email = document.getElementById('email');
-    const address = document.getElementById('address');
-    const transaction = document.getElementById('transaction');
+    const name = document.getElementById('name').value.trim();
+    const tel = document.getElementById('tel').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const transaction = document.getElementById('transaction').value;
 
     const nameRex = /[^\u4e00-\u9fa5-\a-zA-Z]/;
     const telRex = /^[0-9\-]{7,11}$/;
@@ -395,33 +395,33 @@ function createOrder(e) {
         // 訊息動態顯示
         messageActive();
     } else {
-        if (name.value === '' || nameRex.test(name.value) || name.value.length < 2) {
+        if (name === '' || nameRex.test(name) || name.length < 2) {
             verifyText[0].textContent = '請輸入姓名';
             name.focus();
-        } else if (tel.value === '') {
+        } else if (tel === '') {
             verifyText[0].textContent = '';
             verifyText[1].textContent = '請輸入電話號碼';
             tel.focus();
-        } else if (!telRex.test(tel.value)) {
+        } else if (!telRex.test(tel)) {
             verifyText[0].textContent = '';
             verifyText[1].textContent = '電話號碼輸入有誤';
             tel.focus();
-        } else if (email.value === '' || !emailRex.test(email.value)) {
+        } else if (email === '' || !emailRex.test(email)) {
             verifyText[1].textContent = '';
             verifyText[2].textContent = '請輸入 Email';
             email.focus();
-        } else if (address.value === '') {
+        } else if (address === '') {
             verifyText[2].textContent = '';
             verifyText[3].textContent = '請輸入地址';
             address.focus();
         } else {
             let obj = {
                 user: {
-                    name: name.value,
-                    tel: tel.value,
-                    email: email.value,
-                    address: address.value,
-                    payment: transaction.value
+                    name: name,
+                    tel: tel,
+                    email: email,
+                    address: address,
+                    payment: transaction
                 }
             };
 
