@@ -321,10 +321,6 @@ function editCartItem(e) {
 
         axios.patch(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
                 "data": obj
-            }, {
-                headers: {
-                    'Authorization': token
-                }
             })
             .then(function (response) {
                 dataCartList = response.data.carts;
@@ -359,10 +355,6 @@ function editCartItem(e) {
 
         axios.patch(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
                 "data": obj
-            }, {
-                headers: {
-                    'Authorization': token
-                }
             })
             .then(function (response) {
                 dataCartList = response.data.carts;
