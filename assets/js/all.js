@@ -306,7 +306,7 @@ function editCartItem(e) {
     // 增加購物車產品數量
     if (e.target.textContent === "add") {
         // 數量
-        let num = 1;
+        let num;
         // 該產品已存在購物車中，數量 +1
         dataCartList.forEach(function (item) {
             if (item.id === cartId) {
@@ -335,7 +335,7 @@ function editCartItem(e) {
     // 減少購物車產品數量
     if (e.target.textContent === "remove") {
         // 數量
-        let num = 1;
+        let num;
         // 該產品已存在購物車中，數量 +1
         dataCartList.forEach(function (item) {
             if (item.id === cartId) {
