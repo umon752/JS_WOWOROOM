@@ -59,9 +59,9 @@ function productTitle(data) {
         data.forEach(function (item) {
             item.products.forEach(function (value) {
                 if (obj[value.title] === undefined) {
-                    obj[value.title] = value.price;
+                    obj[value.title] = value.price * value.quantity;
                 } else {
-                    obj[value.title] = value.price + value.price;
+                    obj[value.title] = value.price * value.quantity;
                 }
             })
         })
@@ -110,9 +110,9 @@ function productCategory(data) {
         data.forEach(function (item) {
             item.products.forEach(function (value) {
                 if (obj[value.category] === undefined) {
-                    obj[value.category] = 1;
+                    obj[value.category] = value.quantity;
                 } else {
-                    obj[value.category] += 1;
+                    obj[value.category] += value.quantity;
                 }
             })
 
