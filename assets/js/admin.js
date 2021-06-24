@@ -41,6 +41,8 @@ let colors = [primaryDark, primary, primaryLight, light];
  * init
  */
 function init() {
+    // 在 axios header 內統一加上 token (就不需在每個方法內一一夾帶)
+    axios.defaults.headers.common.Authorization = token;
     getOrderList();
 }
 init();
@@ -180,11 +182,7 @@ function toggleChart(e) {
 
 // 取得訂單列表
 function getOrderList() {
-    axios.get(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
-            headers: {
-                'Authorization': token
-            }
-        })
+    axios.get(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`)
         .then(function (response) {
             // 訂單列表資料
             dataOrderList = response.data.orders;
@@ -298,10 +296,6 @@ function editOrderList(e) {
 
         axios.put(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
                 "data": obj
-            }, {
-                headers: {
-                    'Authorization': token
-                }
             })
             .then(function (response) {
                 dataOrderList = response.data.orders;
@@ -322,11 +316,7 @@ function editOrderList(e) {
     // 刪除特定訂單
     if (e.target.textContent === "delete") {
 
-        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders/${orderId}`, {
-                headers: {
-                    'Authorization': token
-                }
-            })
+        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders/${orderId}`)
             .then(function (response) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
@@ -348,11 +338,7 @@ function deleteAllOrder(e) {
     e.preventDefault();
 
     if (dataOrderList.length !== 0) {
-        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`, {
-                headers: {
-                    'Authorization': token
-                }
-            })
+        axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`)
             .then(function (response) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
