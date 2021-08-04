@@ -175,7 +175,6 @@ function addCartItem(e) {
             productId: productId,
             quantity: num
         };
-        // console.log(obj);
         axios.post(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`, {
             data: obj
         }).
@@ -188,7 +187,6 @@ function addCartItem(e) {
             加入購物車成功`;
             // 訊息動態顯示
             messageActive();
-            // console.log(dataCartList);
             renderCartList(dataCartList, finalTotal);
         }).catch(function (error) {
             console.log(error);
@@ -203,7 +201,6 @@ function getCartList() {
         dataCartList = response.data.carts;
         // 最後總金額
         let finalTotal = response.data.finalTotal;
-        // console.log(dataCartList, finalTotal);
         renderCartList(dataCartList, finalTotal);
     }).catch(function (error) {
         console.log(error);
@@ -286,7 +283,6 @@ function editCartItem(e) {
     let cartId = e.target.dataset.id;
     // 刪除購物車內特定產品
     if (e.target.textContent === "close") {
-        // console.log(cartId);
 
         axios.delete(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
         then(function (response) {

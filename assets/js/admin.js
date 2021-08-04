@@ -57,7 +57,6 @@ function productTitle(data) {
         let obj = {};
         let objAry = [];
         let productTitle = [];
-        // console.log(data);
         data.forEach(function (item) {
             item.products.forEach(function (value) {
                 if (obj[value.title] === undefined) {
@@ -67,7 +66,6 @@ function productTitle(data) {
                 }
             })
         })
-        // console.log(obj);
 
         objAry = Object.keys(obj);
         objAry.forEach(function (item) {
@@ -108,7 +106,6 @@ function productCategory(data) {
         let obj = {};
         let objAry = [];
         let productCategory = [];
-        // console.log(data);
         data.forEach(function (item) {
             item.products.forEach(function (value) {
                 if (obj[value.category] === undefined) {
@@ -119,7 +116,6 @@ function productCategory(data) {
             })
 
         })
-        // console.log(obj);
         objAry = Object.keys(obj);
         objAry.forEach(function (item) {
             let ary = [];
@@ -133,7 +129,6 @@ function productCategory(data) {
             return b[1] - a[1];
         });
 
-        // console.log(productCategory);
         renderC3(productCategory);
     }
 }
