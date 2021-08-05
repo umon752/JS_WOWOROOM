@@ -15,75 +15,69 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-secondary sticky-top">
-        <div class="container">
-            <h1 class="h4 d-flex align-items-center font-weight-bold">
-                <a class="navbar-brand" href="./index.html">WOWOROOM</a>
-            </h1>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse flex-grow-0 text-center" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="#">後台管理</a>
-                    <a class="point nav-link position-relative text-primary ml-lg-5" href="#">管理員登入</a>
+    <div class="d-flex flex-column min-vh-100">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-secondary sticky-top">
+            <div class="container">
+                <h1 class="h4 d-flex align-items-center font-weight-bold">
+                    <a class="navbar-brand" href="./index.html">WOWOROOM</a>
+                </h1>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse flex-grow-0 text-center" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="#">後台管理</a>
+                        <a class="point nav-link position-relative text-primary ml-lg-5" href="#">管理員登入</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-
-
-
-
-    <!-- 全品項營收比重 -->
-    <section class="container py-7" data-aos="fade-up">
-        <div class=" d-flex flex-column align-items-center">
-            <!-- 標題 -->
-            <h3 class="js-chartTitle h4 text-dark text-center order-md-2 mb-4">全品項營收比重</h3>
-            <!-- 圓餅圖 -->
-            <div class="js-chart order-md-3 mb-3"></div>
-            <!-- 按鈕 -->
-            <div class="btn-group btn-group-toggle order-md-1 align-self-md-start mb-5" data-toggle="buttons">
-                <label class="js-btnGroup btn btn-sm btn-outline-secondary py-lg-2 active"><input type="radio"
-                        checked>全品項營收比重</label>
-                <label class="js-btnGroup btn btn-sm btn-outline-secondary py-lg-2"><input
-                        type="radio">全產品類別營收比重</label>
+        <!-- 全品項營收比重 -->
+        <section class="container py-7" data-aos="fade-up">
+            <div class=" d-flex flex-column align-items-center">
+                <!-- 標題 -->
+                <h3 class="js-chartTitle h4 text-dark text-center order-md-2 mb-4">全品項營收比重</h3>
+                <!-- 圓餅圖 -->
+                <div class="js-chart order-md-3 mb-3"></div>
+                <!-- 按鈕 -->
+                <div class="btn-group btn-group-toggle order-md-1 align-self-md-start mb-5" data-toggle="buttons">
+                    <label class="js-btnGroup btn btn-sm btn-outline-secondary py-lg-2 active"><input type="radio"
+                            checked>全品項營收比重</label>
+                    <label class="js-btnGroup btn btn-sm btn-outline-secondary py-lg-2"><input
+                            type="radio">全產品類別營收比重</label>
+                </div>
             </div>
-        </div>
 
-        <!-- table -->
-        <div class="text-right">
-            <a href="#" class="js-deleteOrderAll btn btn-outline-dark mb-2">清除全部訂單</a>
-        </div>
+            <!-- table -->
+            <div class="text-right">
+                <a href="#"
+                    class="js-deleteOrderAll btn btn-outline-dark d-inline-flex align-items-center mb-2">清除全部訂單</a>
+            </div>
 
-        <div class="scroll d-md-flex justify-content-center">
-            <table class="table font-size-sm text-nowrap">
-                <thead>
-                    <tr>
-                        <th scope="col">訂單編號</th>
-                        <th scope="col">聯絡人</th>
-                        <th scope="col">聯絡地址</th>
-                        <th scope="col">電子郵件</th>
-                        <th scope="col">訂單品項</th>
-                        <th scope="col">訂單日期</th>
-                        <th scope="col">訂單狀態</th>
-                        <th scope="col">操作</th>
-                    </tr>
-                </thead>
-                <tbody class="js-tbody">
-                </tbody>
-            </table>
-        </div>
+            <div class="scroll d-md-flex justify-content-center">
+                <table class="table font-size-sm text-nowrap">
+                    <thead>
+                        <tr>
+                            <th scope="col">訂單編號</th>
+                            <th scope="col">聯絡人</th>
+                            <th scope="col">聯絡地址</th>
+                            <th scope="col">電子郵件</th>
+                            <th scope="col">訂單品項</th>
+                            <th scope="col">訂單日期</th>
+                            <th scope="col">訂單狀態</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="js-tbody">
+                    </tbody>
+                </table>
+            </div>
 
-    </section>
+        </section>
 
-
-
-
-
-    <footer class="border-top border-secondary-light py-3">
+    <footer class="border-top border-secondary-light py-3 mt-auto">
         <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
             <h1 class="h6 d-flex align-items-center mb-1 mb-md-0">
                 <a class="text-secondary" href="./index.html">WOWOROOM</a>
@@ -103,6 +97,7 @@
             </ul>
         </div>
     </footer>
+</div>
 
     <!-- 訂單品項 Modal -->
     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -129,7 +124,7 @@
 
     <!-- 訊息區塊 -->
     <div
-        class="js-message message bg-white rounded-lg shadow text-dark d-flex justify-content-center align-items-center text-nowrap p-3">
+        class="js-message message bg-white rounded shadow text-dark d-flex justify-content-center align-items-center text-nowrap p-3">
     </div>
 
     <!-- Anime（CDN） -->

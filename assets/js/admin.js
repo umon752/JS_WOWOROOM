@@ -193,26 +193,30 @@ function getOrderList() {
 // 渲染訂單列表
 function renderOrderList(data) {
     let str = '';
+    if (data.length === 0) {
+        // 新增按鈕 disabled 狀態
+        deleteOrder.classList.add('disabled');
+    } else {
+        // 移除按鈕 disabled 狀態
+        deleteOrder.classList.remove('disabled');
+    }
+        data.forEach(function (item, index) {
+            // 訂單日期處理
+            const dateObj = new Date(item.createdAt * 1000);
+            let date = dateObj.getDate()
+            let month = dateObj.getMonth() + 1
+            let year = dateObj.getFullYear()
 
+            if (month < 10) {
+                month = `0${month}`;
+            }
+            if (date < 10) {
+                date = `0${date}`;
+            }
 
+            let orderDate = `${year}/${month}/${date}`;
 
-    data.forEach(function (item, index) {
-        // 訂單日期處理
-        const dateObj = new Date(item.createdAt * 1000);
-        let date = dateObj.getDate()
-        let month = dateObj.getMonth() + 1
-        let year = dateObj.getFullYear()
-
-        if (month < 10) {
-            month = `0${month}`;
-        }
-        if (date < 10) {
-            date = `0${date}`;
-        }
-
-        let orderDate = `${year}/${month}/${date}`;
-
-        str += `<tr>
+            str += `<tr>
         <td>${item.id}</td>
         <td>${item.user.name} ${item.user.tel}</td>
         <td>${item.user.address}</td>
@@ -224,16 +228,17 @@ function renderOrderList(data) {
             <a href="#" class="material-icons h5 text-secondary-light" data-id="${item.id}">delete</a>
         </td>
         </tr>`;
-    });
+        });
 
-    tbody.innerHTML = str;
+        tbody.innerHTML = str;
 
-    // 訂單品項
-    const check = document.querySelectorAll('.js-check');
+        // 訂單品項
+        const check = document.querySelectorAll('.js-check');
 
-    check.forEach(function (item) {
-        item.addEventListener('click', checkList, false);
-    })
+        check.forEach(function (item) {
+            item.addEventListener('click', checkList, false);
+        })
+
 }
 
 // 訂單品項點擊
@@ -295,8 +300,7 @@ function editOrderList(e) {
             .then(function (response) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
-                message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-                    訂單狀態修改成功`;
+                message.innerHTML = `${checkIcon}訂單狀態修改成功！`;
                 // 訊息動態顯示
                 messageActive();
                 // 重新渲染訂單列表
@@ -310,12 +314,16 @@ function editOrderList(e) {
 
     // 刪除特定訂單
     if (e.target.textContent === "delete") {
+        // 顯示 spinner
+        e.target.innerHTML = spinner('text-secondary-light', '');
 
         axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders/${orderId}`)
             .then(function (response) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
-                message.innerHTML = `已刪除訂單`;
+                message.innerHTML = `${checkIcon}已刪除此筆訂單！`;
+                // 隱藏 spinner
+                e.target.innerHTML = `delete`;
                 // 訊息動態顯示
                 messageActive();
                 // 重新渲染圖表
@@ -333,13 +341,17 @@ function deleteAllOrder(e) {
     e.preventDefault();
 
     if (dataOrderList.length !== 0) {
+        // 顯示 spinner
+        e.target.innerHTML = spinner('text-secondary-light', '<span class="ml-2">清除全部訂單</span>');
         axios.delete(`${baseUrl}/api/livejs/v1/admin/${api_path}/orders`)
             .then(function (response) {
                 dataOrderList = response.data.orders;
                 // 顯示訊息
-                message.innerHTML = `已刪除全部訂單`;
+                message.innerHTML = `${checkIcon}已刪除全部訂單！`;
                 // 訊息動態顯示
                 messageActive();
+                // 隱藏 spinner
+                e.target.innerHTML = `清除全部訂單`;
                 // 重新渲染圖表
                 productTitle(dataOrderList);
                 // 重新渲染訂單列表

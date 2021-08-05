@@ -106,7 +106,8 @@ function renderStr(item) {
     <a href="#" class="productImg d-block overflow-hidden">
     <img src=${item.images} class="productImg--bigger">
     </a>
-    <a href="#" class="btn btn-dark rounded-0 w-100 mb-2" data-id="${item.id}">加入購物車</a>
+    <a href="#" class="btn btn-dark rounded-0 d-flex align-items-center justify-content-center w-100" data-id="${item.id}">
+    加入購物車</a>
     <h4 class="font-size-sm h6-md mb-md-2"><a href="#" class="text-dark">${item.title}</a></h4>
     <del class="font-size-sm h6-md">NT$${toThousands(item.origin_price)}</del>
     <h5 class="h6 h5-md">NT$${toThousands(item.price)}</h5>
@@ -171,6 +172,9 @@ function addCartItem(e) {
             }
         })
 
+        // 顯示 spinner
+        e.target.innerHTML = spinner('text-secondary-light', '<span class="ml-2">加入購物車</span>');
+
         let obj = {
             productId: productId,
             quantity: num
@@ -183,8 +187,9 @@ function addCartItem(e) {
             // 最後總金額
             let finalTotal = response.data.finalTotal;
             // 顯示訊息
-            message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-            加入購物車成功`;
+            message.innerHTML = `${checkIcon}加入購物車成功！`;
+            // 隱藏 spinner
+            e.target.innerHTML = '加入購物車';
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
@@ -219,7 +224,11 @@ function renderCartList(data, finalTotal) {
     if (data.length === 0) {
         strTitle = '';
         str = `<div class="h5-md text-primary text-center py-4">目前尚未有商品</div>`;
+        // 新增按鈕 disabled 狀態
+        deleteCart.classList.add('disabled');
     } else {
+        // 移除按鈕 disabled 狀態
+        deleteCart.classList.remove('disabled');
         data.forEach(function (item) {
             str += `<ul class="row align-items-center border-bottom pb-3 mb-3">
     <li class="col-md-4 col-lg-3 d-flex flex-column flex-md-row align-items-md-center">
@@ -259,13 +268,17 @@ function quantityStatus(quantity) {
 function deleteAllCartList(e) {
     e.preventDefault();
     if (dataCartList.length !== 0) {
+        // 顯示 spinner
+        e.target.innerHTML = spinner('text-secondary-light', '<span class="ml-2">刪除所有品項</span>');
         axios.delete(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts`).
         then(function (response) {
             dataCartList = response.data.carts;
             // 最後總金額
             let finalTotal = response.data.finalTotal;
             // 顯示訊息
-            message.innerHTML = `已刪除所有品項`;
+            message.innerHTML = `${checkIcon}已刪除所有品項！`;
+            // 隱藏 spinner
+            e.target.innerHTML = `刪除所有品項`;
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
@@ -283,14 +296,17 @@ function editCartItem(e) {
     let cartId = e.target.dataset.id;
     // 刪除購物車內特定產品
     if (e.target.textContent === "close") {
-
+        // 顯示 spinner
+        e.target.innerHTML = spinner('text-secondary-light', '');
         axios.delete(`${baseUrl}/api/livejs/v1/customer/${api_path}/carts/${cartId}`).
         then(function (response) {
             dataCartList = response.data.carts;
             // 最後總金額
             let finalTotal = response.data.finalTotal;
             // 顯示訊息
-            message.innerHTML = `已刪除單筆品項`;
+            message.innerHTML = `${checkIcon}已刪除單筆品項！`;
+            // 隱藏 spinner
+            e.target.innerHTML = `close`;
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
@@ -403,6 +419,8 @@ function createOrder(e) {
             verifyText[3].textContent = '請輸入地址';
             address.focus();
         } else {
+            // 顯示 spinners
+            e.target.innerHTML = spinner('text-white', '<span class="ml-2">送出預訂資料</span>');
             let obj = {
                 user: {
                     name: name,
@@ -422,13 +440,16 @@ function createOrder(e) {
                 })
                 // 清除 input 
                 form.reset();
+                // 隱藏 spinners
+                formSend.innerHTML = `送出預訂資料`;
                 // 清除購物車產品
-                cartList.innerHTML = `<div class="text-primary text-center py-4">目前尚未有商品</div>`;
+                cartList.innerHTML = `<div class="text-primary text-center py-4">
+                目前尚未有商品
+                </div>`;
                 // 總金額歸 0
                 totalMoney.textContent = `NT$0`;
                 // 顯示訊息
-                message.innerHTML = `<span class="material-icons text-primary-dark mr-1">check</span>
-                已送出預訂資料`;
+                message.innerHTML = `${checkIcon}已送出預訂資料`;
                 // 訊息動態顯示
                 messageActive();
             }).catch(function (error) {
