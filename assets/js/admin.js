@@ -185,8 +185,9 @@ function getOrderList() {
             productTitle(dataOrderList);
             // 重新訂單列表
             renderOrderList(dataOrderList);
-        }).catch(function (error) {
-            console.log(error);
+        }).catch(function () {
+            // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
         })
 }
 
@@ -305,8 +306,9 @@ function editOrderList(e) {
                 messageActive();
                 // 重新渲染訂單列表
                 renderOrderList(dataOrderList);
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
     }
 
@@ -330,8 +332,9 @@ function editOrderList(e) {
                 productTitle(dataOrderList);
                 // 重新渲染訂單列表
                 renderOrderList(dataOrderList);
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
     }
 }
@@ -356,8 +359,9 @@ function deleteAllOrder(e) {
                 productTitle(dataOrderList);
                 // 重新渲染訂單列表
                 renderOrderList(dataOrderList);
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
     }
 }

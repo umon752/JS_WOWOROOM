@@ -94,8 +94,9 @@ function getProductList() {
         dataProductList = response.data.products;
         renderProductList();
         filterSelect();
-    }).catch(function (error) {
-        console.log(error);
+    }).catch(function () {
+        // 顯示訊息
+        message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
     })
 }
 
@@ -193,8 +194,9 @@ function addCartItem(e) {
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
-        }).catch(function (error) {
-            console.log(error);
+        }).catch(function () {
+            // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
         })
     }
 }
@@ -207,8 +209,9 @@ function getCartList() {
         // 最後總金額
         let finalTotal = response.data.finalTotal;
         renderCartList(dataCartList, finalTotal);
-    }).catch(function (error) {
-        console.log(error);
+    }).catch(function () {
+        // 顯示訊息
+        message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
     })
 }
 
@@ -282,8 +285,9 @@ function deleteAllCartList(e) {
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
-        }).catch(function (error) {
-            console.log(error);
+        }).catch(function () {
+            // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
         })
     }
 }
@@ -310,8 +314,9 @@ function editCartItem(e) {
             // 訊息動態顯示
             messageActive();
             renderCartList(dataCartList, finalTotal);
-        }).catch(function (error) {
-            console.log(error);
+        }).catch(function () {
+            // 顯示訊息
+            message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
         })
     }
 
@@ -339,8 +344,9 @@ function editCartItem(e) {
                 // 最後總金額
                 let finalTotal = response.data.finalTotal;
                 renderCartList(dataCartList, finalTotal);
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+                message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
     }
 
@@ -373,8 +379,9 @@ function editCartItem(e) {
                 // 最後總金額
                 let finalTotal = response.data.finalTotal;
                 renderCartList(dataCartList, finalTotal);
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+                message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
     }
 }
@@ -452,8 +459,9 @@ function createOrder(e) {
                 message.innerHTML = `${checkIcon}已送出預訂資料`;
                 // 訊息動態顯示
                 messageActive();
-            }).catch(function (error) {
-                console.log(error);
+            }).catch(function () {
+                // 顯示訊息
+                message.innerHTML = `${errorIcon}發生錯誤，請重新整理頁面`;
             })
         }
     }

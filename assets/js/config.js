@@ -14,3 +14,5 @@ function spinner(color = 'text-secondary-light', text) {
 
 // checkIcon
 let checkIcon = `<span class="material-icons text-primary mr-2">check_circle</span>`
+// errorIcon
+let errorIcon = `<span class="material-icons text-primary mr-2">error</span>`
